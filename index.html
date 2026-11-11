@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>素材专项稿件 · 挑选与投放速查</title>
+<style>
+:root { color-scheme: light dark; }
+:root {
+  --background: light-dark(#ffffff, #16181d);
+  --foreground: light-dark(#1f2328, #e6e8eb);
+  --muted-foreground: light-dark(#59636e, #9aa2ad);
+  --border: light-dark(#d7dde3, #2e3339);
+  --primary: light-dark(#2563eb, #6ea8fe);
+  --primary-foreground: light-dark(#ffffff, #101418);
+  --viz-series-1: light-dark(#d64545, #ff7a7a);
+  --viz-series-2: light-dark(#2563eb, #6ea8fe);
+  --viz-series-3: light-dark(#2e8b57, #7bd88f);
+  --viz-series-4: light-dark(#b07d10, #e0b34d);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 24px; background: var(--background); color: var(--foreground);
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", Roboto, "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.6;
+}
+h2 { font-size: 18px; font-weight: 500; margin: 0 0 4px; }
+h3 { font-size: 14px; font-weight: 500; margin: 0; }
+.text-small { font-size: 12px; }
+.text-muted { color: var(--muted-foreground); }
+code { background: color-mix(in srgb, var(--foreground) 6%, transparent); padding: 1px 6px; border-radius: 6px; font-size: 12px; font-family: ui-monospace, Consolas, monospace; }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; }
+.nav-link { appearance: none; border: 1px solid transparent; background: transparent; color: var(--muted-foreground); padding: 5px 14px; border-radius: 999px; font-size: 14px; font-family: inherit; cursor: pointer; }
+.nav-link:hover { color: var(--foreground); background: color-mix(in srgb, var(--foreground) 6%, transparent); }
+.nav-link.active { background: var(--primary); color: var(--primary-foreground); }
+.btn { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); border-radius: 8px; padding: 4px 10px; font-size: 12px; font-family: inherit; cursor: pointer; }
+.btn:hover { background: color-mix(in srgb, var(--foreground) 6%, transparent); }
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn-xs { padding: 2px 8px; font-size: 11px; border-radius: 6px; }
+.viz-badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; background: color-mix(in srgb, var(--foreground) 8%, transparent); color: var(--muted-foreground); white-space: nowrap; }
+.cursor-interaction { cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="sucai-zhuanxiang-picks">
+  <h2>素材专项稿件 · 挑选与投放速查</h2>
+  <div class="text-small text-muted" style="margin-bottom:10px">5 条稿件 · 4 个专项 · 新增批次 11.8–11.9 · 内容ID 已入库（2026-11-11）</div>
+  <div class="nav nav-pills" role="group" aria-label="按专项筛选" style="margin-bottom:12px">
+    <button type="button" class="nav-link active" aria-pressed="true" data-cat="all">全部</button>
+    <button type="button" class="nav-link" aria-pressed="false" data-cat="热点">热点 ×2</button>
+    <button type="button" class="nav-link" aria-pressed="false" data-cat="单机">单机</button>
+    <button type="button" class="nav-link" aria-pressed="false" data-cat="MOBA游戏">MOBA游戏</button>
+    <button type="button" class="nav-link" aria-pressed="false" data-cat="三角洲">三角洲</button>
+  </div>
+  <div id="sp-board" class="sp-board" aria-live="polite" aria-label="稿件卡片看板"></div>
+</div>
+<style>
+#sucai-zhuanxiang-picks .sp-board { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
+#sucai-zhuanxiang-picks .sp-item { background: color-mix(in srgb, var(--sp-c) 8%, transparent); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+#sucai-zhuanxiang-picks .sp-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+#sucai-zhuanxiang-picks .sp-cat { font-weight: 500; color: var(--sp-c); }
+#sucai-zhuanxiang-picks .sp-title { font-weight: 500; margin: 0; line-height: 1.45; }
+#sucai-zhuanxiang-picks .sp-ids { display: flex; flex-direction: column; gap: 4px; }
+#sucai-zhuanxiang-picks .sp-id { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#sucai-zhuanxiang-picks .sp-lab { font-size: 12px; color: var(--muted-foreground); min-width: 52px; }
+#sucai-zhuanxiang-picks .sp-notes summary { color: var(--primary); font-size: 12px; padding: 2px 0; }
+#sucai-zhuanxiang-picks .sp-notes { border-top: 1px solid var(--border); padding-top: 6px; }
+#sucai-zhuanxiang-picks .sp-note { display: flex; gap: 8px; margin-top: 6px; }
+#sucai-zhuanxiang-picks .sp-note-lab { font-size: 12px; color: var(--muted-foreground); flex: 0 0 52px; padding-top: 1px; }
+#sucai-zhuanxiang-picks .sp-note-body { font-size: 12px; line-height: 1.55; min-width: 0; }
+#sucai-zhuanxiang-picks .sp-remark { margin: 0; font-size: 12px; }
+#sucai-zhuanxiang-picks .sp-ids code { word-break: break-all; }
+</style>
+<script>
+(function () {
+  var root = document.getElementById('sucai-zhuanxiang-picks');
+  var DATA = [
+    { cat: '热点', batch: '批次 11.9', dir: '赛事回放',
+      title: '【2026全球总决赛】11月9日 BLG vs T1',
+      bv: 'BV1TgWp6MEHJ', cid: '10747165',
+      up: '方向一【赛事回放】S16焦点战回放！GEN vs IG全场精华\n（同块备选：方向二【赛后锐评】根据原标题改写）',
+      down: '上B站，看S16',
+      search: '搜索"S16"：海量电竞赛事直播尽在B站\n搜索"S16"：海量赛事资讯速递尽在B站',
+      remark: '2-S赛热点块 · 无 epid 绑定要求' },
+    { cat: '热点', batch: '批次 11.9', dir: '赛后锐评',
+      title: '【Karsa】BLG vs T1 LPL今年终于打破魔咒了😭',
+      bv: 'BV1KpW461EVx', cid: '10747167',
+      up: '方向二【赛后锐评】根据原标题改写',
+      down: '上B站，看S16',
+      search: '搜索"S16"：海量电竞赛事直播尽在B站\n搜索"S16"：海量赛事资讯速递尽在B站',
+      remark: '与热点①同块 · 共用压字模板' },
+    { cat: '单机', batch: '批次 11.9', dir: '单主机游戏',
+      title: '刀光剑影的武侠厮杀！（影之刃零）',
+      bv: 'BV1GwxN6qE8v', cid: '10747038',
+      up: '用原标题改写',
+      down: '①新游推荐：点击视频上B站，看完整版新游盘点 / 新游测评\n②单机实况 / 新游试玩：点击视频上B站，看完整版游戏实况 / 热门新游试玩',
+      search: '搜索"新游推荐"：海量游戏资讯尽在B站\n搜索"（游戏名称）"：海量新游深度测评 / 游戏实况尽在B站',
+      remark: '11.9 批次 8 条影之刃零相关 · 取置顶' },
+    { cat: 'MOBA游戏', batch: '批次 11.8', dir: 'MOBA游戏',
+      title: '【2026KPL年度总决赛】11月4日 广州TTG VS 重庆狼队',
+      bv: 'BV1cdx96REhj', cid: '10740582',
+      up: '用原标题改写',
+      down: '实况类：点击视频上B站，看完整版游戏实况 / 海量王者名场面 / 海量王者高燃瞬间',
+      search: '搜索"王者荣耀"：更多高燃集锦、搞笑二创尽在B站',
+      remark: '11.8 批次 5 条KPL / 王者相关 · 取置顶' },
+    { cat: '三角洲', batch: '批次 11.8', dir: 'S12',
+      title: 'AZ3太恐怖了！咬紧牙关究极优化！总体局数增加！S12赛季任务先看后做！',
+      bv: 'BV16C4b6DEEW', cid: '10740584',
+      up: '实况类 / 攻略向均：根据稿件原标题改写',
+      down: '实况类：点击视频上B站，看完整版游戏实况\n攻略向：点击视频上B站，看完整版游戏攻略\n（按实际剪辑方向二选一）',
+      search: '搜索"三角洲行动"：海量高能实况、活动资讯尽在B站\n搜索"三角洲"：海量攻略资讯、爆笑整活尽在B站',
+      remark: '双模板（实况类 / 攻略向）· 投放时按剪辑方向选一' }
+  ];
+  var CATC = { '热点': 'var(--viz-series-1)', '单机': 'var(--viz-series-2)', 'MOBA游戏': 'var(--viz-series-3)', '三角洲': 'var(--viz-series-4)' };
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escAttr(s) { return esc(s).replace(/"/g, '&quot;'); }
+  function nl(s) { return esc(s).replace(/\n/g, '<br>'); }
+  var board = root.querySelector('#sp-board');
+  board.innerHTML = DATA.map(function (d) {
+    return '<article class="sp-item" data-cat="' + escAttr(d.cat) + '" style="--sp-c:' + CATC[d.cat] + '">' +
+      '<div class="sp-head"><span class="sp-cat">' + esc(d.cat) + '</span>' +
+      '<span class="viz-badge">' + esc(d.batch) + '</span>' +
+      '<span class="viz-badge">' + esc(d.dir) + '</span></div>' +
+      '<h3 class="sp-title">' + esc(d.title) + '</h3>' +
+      '<div class="sp-ids">' +
+      '<div class="sp-id"><span class="sp-lab">BV号</span><code>' + esc(d.bv) + '</code>' +
+      '<button type="button" class="btn btn-xs" data-copy="' + escAttr(d.bv) + '" aria-label="复制BV号">复制</button></div>' +
+      '<div class="sp-id"><span class="sp-lab">内容ID</span><code>' + esc(d.cid) + '</code>' +
+      '<button type="button" class="btn btn-xs" data-copy="' + escAttr(d.cid) + '" aria-label="复制内容ID">复制</button></div>' +
+      '</div>' +
+      '<details class="sp-notes"><summary class="cursor-interaction">剪辑方案（压字 / 落版 / 搜索词）</summary>' +
+      '<div class="sp-note"><span class="sp-note-lab">上压</span><div class="sp-note-body">' + nl(d.up) + '</div></div>' +
+      '<div class="sp-note"><span class="sp-note-lab">下压</span><div class="sp-note-body">' + nl(d.down) + '</div></div>' +
+      '<div class="sp-note"><span class="sp-note-lab">搜索词</span><div class="sp-note-body">' + nl(d.search) + '</div></div>' +
+      '</details>' +
+      '<p class="sp-remark text-small text-muted">' + esc(d.remark) + '</p>' +
+      '</article>';
+  }).join('');
+  var btns = [].slice.call(root.querySelectorAll('.nav-link'));
+  var items = [].slice.call(board.querySelectorAll('.sp-item'));
+  var currentCat = 'all';
+  function applyFilter(cat) {
+    currentCat = cat;
+    btns.forEach(function (b) {
+      var on = b.getAttribute('data-cat') === cat;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    items.forEach(function (it) {
+      it.style.display = (cat === 'all' || it.getAttribute('data-cat') === cat) ? '' : 'none';
+    });
+  }
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      applyFilter(b.getAttribute('data-cat'));
+    });
+  });
+  function copyText(t, btn) {
+    function done() {
+      var old = btn.textContent;
+      btn.textContent = '已复制';
+      btn.disabled = true;
+      setTimeout(function () { btn.textContent = old; btn.disabled = false; }, 1200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = t;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      ta.remove();
+      done();
+    }
+  }
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-copy]') : null;
+    if (b) copyText(b.getAttribute('data-copy'), b);
+  });
+})();
+</script>
+</body>
+</html>
